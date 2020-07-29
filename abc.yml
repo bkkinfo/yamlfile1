@@ -1,0 +1,109 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-webserver
+spec:
+  selector:
+    matchLabels:
+      app: nginx-webserver
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: nginx-webserver
+    spec:
+      nodeSelector:
+        "beta.kubernetes.io/os": linux
+      containers:
+      - name: nginxserver
+        image: acrname6ak.azurecr.io/nginx-webserver:latest
+        ports:
+        - containerPort: 80
+      - name: dazzling_bardeen
+        image: acrname6ak.azurecr.io/jenkins:latest
+        ports:
+        - containerPort: 8080
+
+
+---
+
+
+apiVersion: v1
+
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-webserver
+spec:
+  selector:
+    matchLabels:
+      app: nginx-webserver
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: nginx-webserver
+    spec:
+      nodeSelector:
+        "beta.kubernetes.io/os": linux
+      containers:
+      - name: nginxserver
+        image: acrname6ak.azurecr.io/nginx-webserver:latest       
+        ports:
+        - containerPort: 80
+
+
+---
+
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-webserver
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+  selector:
+    app: nginx-webserver  
+
+---
+
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jenkins
+spec:
+  selector:
+    matchLabels:
+      app: jenkins
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: jenkins
+    spec:
+      nodeSelector:
+        "beta.kubernetes.io/os": linux
+      containers:
+      - name: jenkins
+        image: acrname6ak.azurecr.io/jenkins:latest       
+        ports:
+        - containerPort: 8080
+
+
+---
+
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: jenkins
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 8080
+  selector:
+    app: jenkins
